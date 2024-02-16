@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model classes {
+  cls_id     Int        @id(map: "classes_ix1") @default(autoincrement())
+  cls_ur     String     @unique @db.VarChar(12)
+  cls_type   Int
+  cls_sku    String     @unique @db.VarChar(10)
+  cls_desc   String     @db.VarChar(150)
+  cls_tags   String[]   @db.VarChar
+  cls_height Int        @default(0) @db.SmallInt
+  cls_width  Int        @default(0) @db.SmallInt
+  cls_weight Int        @default(0) @db.SmallInt
+  cls_mft    Int?
+  products   products[]
+}
+
+model images {
+  img_id   Int      @id(map: "images_ix1") @default(autoincrement())
+  img_ur   String   @unique @db.VarChar(12)
+  img_doc  String[] @db.VarChar
+  img_refs String[] @db.VarChar
+  img_note String?  @db.VarChar(1000)
+  img_src  Bytes?
+}
+
+model inventories {
+  inv_id       Int            @id(map: "inventories_ix1") @default(autoincrement())
+  inv_ur       String         @unique @db.VarChar(5)
+  inv_desc     String         @db.VarChar(30)
+  transactions transactions[]
+}
+
+model operations {
+  opr_id       Int            @id(map: "operations_ix1") @default(autoincrement())
+  opr_ur       String         @unique @db.VarChar(12)
+  opr_type     String         @db.VarChar(20)
+  opr_state    String         @db.VarChar(20)
+  opr_prt      Int
+  opr_note     String?        @db.VarChar(1000)
+  opr_entdate  DateTime       @db.Timestamp(0)
+  opr_duedate  DateTime?      @db.Timestamp(0)
+  opr_findate  DateTime?      @db.Timestamp(0)
+  partners     partners       @relation(fields: [opr_prt], references: [prt_id], map: "operations_fk1")
+  oprdetails   oprdetails[]
+  transactions transactions[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model oprdetails {
+  opd_id       Int        @id(map: "oprdetails_ix1") @default(autoincrement())
+  opd_opr      Int
+  opd_prd      Int
+  opd_qty      Decimal    @default(0) @db.Decimal(8, 2)
+  opd_val      Decimal    @default(0) @db.Decimal(8, 2)
+  opd_discount Decimal    @default(0) @db.Decimal(8, 2)
+  opd_note     String?    @db.VarChar(150)
+  operations   operations @relation(fields: [opd_opr], references: [opr_id], onDelete: Cascade, map: "oprdetails_fk1")
+  products     products   @relation(fields: [opd_prd], references: [prd_id], map: "oprdetails_fk2")
+}
+
+model partners {
+  prt_id      Int          @id(map: "partners_ix1") @default(autoincrement())
+  prt_ur      String       @unique @db.VarChar(12)
+  prt_name    String       @db.VarChar(30)
+  prt_alias   String?      @db.VarChar(30)
+  prt_address String?      @db.VarChar(200)
+  prt_phone   String[]     @db.VarChar
+  prt_email   String?      @db.VarChar(30)
+  prt_type    String       @db.VarChar(20)
+  prt_state   Boolean      @default(true)
+  prt_account Int
+  operations  operations[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model products {
+  prd_id     Int          @id(map: "products_ix1") @default(autoincrement())
+  prd_ur     String       @unique @db.VarChar(12)
+  prd_cls    Int
+  prd_sku    String       @db.VarChar(10)
+  prd_unit   String       @db.VarChar(20)
+  prd_price  Decimal      @default(0) @db.Decimal(8, 2)
+  prd_type   String?      @db.VarChar(20)
+  prd_state  String       @db.VarChar(20)
+  prd_color  String?      @db.VarChar(30)
+  prd_desc   String?      @db.VarChar(100)
+  prd_qtb    Boolean      @default(true)
+  oprdetails oprdetails[]
+  classes    classes      @relation(fields: [prd_cls], references: [cls_id], map: "products_fk1")
+  trsdetails trsdetails[]
+}
+
+model transactions {
+  trs_id      Int          @id(map: "transactions_ix1") @default(autoincrement())
+  trs_ur      String       @unique @db.VarChar(12)
+  trs_opr     Int?
+  trs_inv     Int
+  trs_type    String       @db.VarChar(20)
+  trs_state   String       @db.VarChar(20)
+  trs_entdate DateTime     @db.Timestamp(0)
+  trs_duedate DateTime     @db.Timestamp(0)
+  trs_findate DateTime     @db.Timestamp(0)
+  trs_note    String?      @db.VarChar(1000)
+  trs_doc     String[]     @db.VarChar
+  inventories inventories  @relation(fields: [trs_inv], references: [inv_id], map: "transactions_fk1")
+  operations  operations?  @relation(fields: [trs_opr], references: [opr_id], onDelete: Restrict, map: "transactions_fk2")
+  trsdetails  trsdetails[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model trsdetails {
+  trd_id       Int          @id(map: "trsdetails_ix1") @default(autoincrement())
+  trd_trs      Int
+  trd_prd      Int
+  trd_qty      Decimal      @default(0) @db.Decimal(8, 2)
+  trd_note     String?      @db.VarChar(100)
+  trd_mfl      String?      @db.VarChar(12)
+  transactions transactions @relation(fields: [trd_trs], references: [trs_id], onDelete: Cascade, map: "trsdetails_fk1")
+  products     products     @relation(fields: [trd_prd], references: [prd_id], map: "trsdetails_fk2")
+}
+
+model users {
+  usr_id    Int     @id(map: "users_ix1") @default(autoincrement())
+  usr_ur    String  @unique @db.VarChar(12)
+  usr_name  String  @unique @db.VarChar(30)
+  usr_email String  @unique @db.VarChar(30)
+  usr_hash  String  @db.VarChar
+  usr_role  Int
+  usr_state Boolean @default(false)
+}
+
+model varclasses {
+  vcs_id   Int        @id(map: "varclasses_ix1") @default(autoincrement())
+  vcs_ur   String     @unique @db.VarChar(12)
+  vcs_desc String     @db.VarChar(30)
+  variants variants[]
+}
+
+model variants {
+  var_id     Int        @id(map: "variants_ix1") @default(autoincrement())
+  var_cls    Int
+  var_str    String?    @db.VarChar(20)
+  var_abb    String?    @db.VarChar(3)
+  var_num    Int?
+  varclasses varclasses @relation(fields: [var_cls], references: [vcs_id], map: "variants_fk1")
+}
