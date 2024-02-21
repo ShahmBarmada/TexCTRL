@@ -2,9 +2,17 @@ this project is my take on building an ERP Web-app aimed to serve the processes 
 
 # TexCTRL
 
-a short for `Textile Control`, an ERP Web-app
-
-built using Remix, React, Prisma, PostgreSQL, AG-Grid.
+a short for `Textile Control`, an ERP Web-app built using:
+- RemixRun
+- ReactJS
+- Prisma ORM
+- PostgreSQL
+- AG-Grid
+- Zod
+- ExpressJS
+- bcrypt
+- TailWindCSS
+- TypeScript
 
 thanks to all the people who built these awesome tools.
 
