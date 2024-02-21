@@ -12,12 +12,11 @@ export async function loader() {
 }
 
 export interface gridInterface {
-  varid: number;
-  varref: string;
-  vardesc: string;
-  varstring: string;
-  varabb: string;
-  varnumeric: number;
+  var_id: number;
+  var_cls: string;
+  var_str: string;
+  var_abb: string;
+  var_num: number;
 }
 
 export default function CfgIndex() {
@@ -26,14 +25,11 @@ export default function CfgIndex() {
   const gridRef = useRef<AgGridReact<gridInterface>>(null);
 
   const [colDefs, setColDefs] = useState<ColDef[]>([
-    // const colDefs: ColDef[] = [
-    { headerName: "ID", field: "varid", cellDataType: "number", cellClass: "font-semibold", suppressMovable: true },
-    { headerName: "Ref", field: "varref", cellDataType: "text" },
-    { headerName: "Description", field: "vardesc", cellDataType: "text" },
-    { headerName: "String", field: "varstring", cellDataType: "text" },
-    { headerName: "Abb.", field: "varabb", cellDataType: "text", cellClass: "text-center" },
-    { headerName: "Numeric", field: "varnumeric", cellDataType: "number", cellClass: "text-center" },
-    // ];
+    { headerName: "ID", field: "var_id", cellDataType: "number", cellClass: "font-semibold", suppressMovable: true },
+    { headerName: "Ref", field: "var_cls", cellDataType: "text" },
+    { headerName: "String", field: "var_str", cellDataType: "text" },
+    { headerName: "Abb.", field: "var_abb", cellDataType: "text", cellClass: "text-center" },
+    { headerName: "Numeric", field: "var_num", cellDataType: "number", cellClass: "text-center" },
   ]);
 
   const onGridRendered = useCallback(() => {
