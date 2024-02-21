@@ -147,7 +147,7 @@ model varclasses {
 model variants {
   var_id     Int        @id(map: "variants_ix1") @default(autoincrement())
   var_cls    Int
-  var_str    String?    @db.VarChar(20)
+  var_str    String     @db.VarChar(20)
   var_abb    String?    @db.VarChar(3)
   var_num    Int?
   varclasses varclasses @relation(fields: [var_cls], references: [vcs_id], map: "variants_fk1")
