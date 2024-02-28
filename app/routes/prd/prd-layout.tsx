@@ -16,31 +16,19 @@ export default function PrdLayout() {
           <NavLink
             to={"/dashboard/products"}
             end
-            className={({ isActive }) =>
-              `rounded-t px-2 hover:bg-slate-600 ${
-                isActive ? "bg-slate-600" : ""
-              }`
-            }
+            className={({ isActive }) => `rounded-t px-2 hover:bg-slate-600 ${isActive ? "bg-slate-600" : ""}`}
           >
             <span>All Products</span>
           </NavLink>
           <NavLink
             to={"/dashboard/products/classes"}
-            className={({ isActive }) =>
-              `rounded-t px-2 hover:bg-slate-600 ${
-                isActive ? "bg-slate-600" : ""
-              }`
-            }
+            className={({ isActive }) => `rounded-t px-2 hover:bg-slate-600 ${isActive ? "bg-slate-600" : ""}`}
           >
             <span>Classes</span>
           </NavLink>
           <NavLink
             to={"/dashboard/products/mfts"}
-            className={({ isActive }) =>
-              `rounded-t px-2 hover:bg-slate-600 ${
-                isActive ? "bg-slate-600" : ""
-              }`
-            }
+            className={({ isActive }) => `rounded-t px-2 hover:bg-slate-600 ${isActive ? "bg-slate-600" : ""}`}
           >
             <span>Manufacturing Templates</span>
           </NavLink>
@@ -55,7 +43,7 @@ export default function PrdLayout() {
           />
         </div>
       </div>
-      <div className="p-2 rounded-tl-lg bg-slate-100 grow">
+      <div className="p-2 rounded-tl-lg bg-slate-100 grow flex">
         <Outlet />
       </div>
     </div>

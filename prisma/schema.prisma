@@ -11,7 +11,7 @@ datasource db {
 model classes {
   cls_id     Int        @id(map: "classes_ix1") @default(autoincrement())
   cls_ur     String     @unique @db.VarChar(12)
-  cls_type   Int
+  cls_type   String     @db.VarChar(20)
   cls_sku    String     @unique @db.VarChar(10)
   cls_desc   String     @db.VarChar(150)
   cls_tags   String[]   @db.VarChar

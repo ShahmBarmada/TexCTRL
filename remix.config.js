@@ -42,7 +42,7 @@ export default {
           route("classes", "routes/prd/prd-classes-layout.tsx", () => {
             route("", "routes/prd/prd-classes-index.tsx", { index: true }),
             route("new", "routes/prd/prd-classes-new.tsx"),
-            route("view", "routes/prd/prd-classes-view.tsx"),
+            route(":clsref", "routes/prd/prd-classes-view.tsx"),
             route("edit", "routes/prd/prd-classes-edit.tsx");
           });
           route("mfts", "routes/prd/prd-mfts.tsx");
